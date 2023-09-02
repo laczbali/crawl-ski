@@ -1,0 +1,26 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "BUILD",
+            "type": "shell",
+            "command": "npx tsc",
+            "options": {
+                "statusbar": {
+                    "hide": true
+                }
+            }
+        },
+        {
+            "label": "RUN",
+            "type": "shell",
+            "command": "node .\\bin\\index.js",
+            "dependsOn": ["BUILD"],
+            "options": {
+                "statusbar": {
+                    "backgroundColor": "statusBarItem.warningBackground"
+                }
+            }
+        },
+    ]
+}
