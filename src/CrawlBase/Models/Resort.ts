@@ -1,2 +1,2 @@
-export class Resort extends Node {
+export class Resort {
 }

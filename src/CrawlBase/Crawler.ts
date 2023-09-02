@@ -9,7 +9,6 @@ export class Crawler<CrawlerType extends ISiteCrawler> {
     }
 
     public start() {
-        console.log(this.crawler.getRegions());
     }
 
 }
