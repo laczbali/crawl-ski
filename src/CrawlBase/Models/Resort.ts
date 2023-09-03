@@ -17,15 +17,21 @@ export class Resort {
     // pricing
     priceStats: PriceInfo[] = [];
 
-    /**
-     * First dimension is the sheet, second dimension is the header value
-     */
-    static getCsvHeaders(): string[][] {
+    static getCsvHeaders(): { name: string, headers: string[] }[] {
         return [
-            ['Name', 'URL', 'Region', 'Altitude (m)', 'Highest Lift Altitude (m)', 'Slope Length (km)', 'Longest Run (km)', 'Lift Count'],
-            ['Name', 'Year Range', 'Month', 'Low Slope Snow Depth (cm)', 'High Slope Snow Depth (cm)'],
-            ['Name', 'Number of Days', 'Price', 'Currency']
-        ]
+            {
+                name: 'base',
+                headers: ['Name', 'URL', 'Region', 'Altitude (m)', 'Highest Lift Altitude (m)', 'Slope Length (km)', 'Longest Run (km)', 'Lift Count']
+            },
+            {
+                name: 'snow',
+                headers: ['Name', 'Year Range', 'Month', 'Low Slope Snow Depth (cm)', 'High Slope Snow Depth (cm)']
+            },
+            {
+                name: 'price',
+                headers: ['Name', 'Number of Days', 'Price', 'Currency']
+            }
+        ];
     }
 
     /**

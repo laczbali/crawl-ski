@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "@types/jsdom": "^21.1.2",
+    "@types/node": "^20.5.9",
     "jsdom": "^22.1.0"
   }
 }
