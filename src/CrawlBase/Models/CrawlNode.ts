@@ -1,8 +1,8 @@
-export class Node {
+export class CrawlNode {
     name: string;
     url: string;
 
-    constructor(name: string, url: string, children: Node[]) {
+    constructor(name: string, url: string) {
         this.name = name;
         this.url = url;
     }

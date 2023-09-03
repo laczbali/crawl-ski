@@ -1,5 +1,5 @@
-import { Crawler } from "./CrawlBase/Crawler";
-import { CrawlIgluski } from "./CrawlIgluski/CrawlIgluski";
+import { Crawler } from "./CrawlBase/Crawler.js";
+import { CrawlIgluski } from "./CrawlIgluski/CrawlIgluski.js";
 
-var crawler = new Crawler(CrawlIgluski);
-crawler.start();
+
+var resorts = await new Crawler(CrawlIgluski).doCrawl();

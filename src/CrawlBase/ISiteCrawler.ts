@@ -1,4 +1,5 @@
-import { Resort } from "./Models/Resort";
+import { CrawlNode } from "./Models/CrawlNode.js";
+import { Resort } from "./Models/Resort.js";
 
 export interface ISiteCrawler {
 
@@ -9,17 +10,17 @@ export interface ISiteCrawler {
      * 
      * eg2: North Alpes, High Tatra, ...
      */
-    getRegions(): Node[];
+    getRegions(): Promise<CrawlNode[]>;
 
     /**
      * Returns the list of resorts for a given region
      * 
      * eg: Les 2 Alpes, Les Orres, ...
      */
-    getResorts(region: Node): Node[];
+    getResorts(region: CrawlNode): Promise<CrawlNode[]>;
 
     /**
      * Returns all the resort info
      */
-    getResortInfo(resort: Node): Resort;
+    getResortInfo(resort: CrawlNode): Promise<Resort>;
 }
