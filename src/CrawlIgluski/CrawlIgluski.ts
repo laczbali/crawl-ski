@@ -52,7 +52,7 @@ export class CrawlIgluski implements ISiteCrawler {
         });
 
         var validResorts = resorts.filter(x => x.url !== '');
-        return this.isDebug ? validResorts.slice(0, 1) : validResorts;
+        return this.isDebug ? validResorts.slice(0, 2) : validResorts;
     }
 
     public async getResortInfo(resort: CrawlNode): Promise<Resort> {

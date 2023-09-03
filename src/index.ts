@@ -10,12 +10,17 @@ var resorts = await new Crawler(CrawlIgluski).doCrawl();
 const outputDir = '.\\output';
 if (!fs.existsSync(outputDir)) fs.mkdir(outputDir, (err) => { if (err) console.error(err); });
 
-var resortCsvData = resorts.flatMap(x => x.getCsvValues());
+var resortsAsCsvData = resorts.map(x => x.getCsvValues()).reduce((acc, curr) => {
+    for (var i = 0; i < acc.length; i++) {
+        acc[i].push(...curr[i]);
+    }
+    return acc;
+})
 var headerData = Resort.getCsvHeaders();
 
 headerData.forEach((sheetInfo, sheetIndex) => {
     var headerData = sheetInfo.headers.join(';');
-    var sheetData = resortCsvData[sheetIndex].map(x => x.join(';')).join('\n');
+    var sheetData = resortsAsCsvData[sheetIndex].map(x => x.join(';')).join('\n');
     var sheet = `${headerData}\n${sheetData}`;
     fs.writeFile(`${outputDir}\\${sheetInfo.name}.csv`, sheet, (err) => { if (err) console.error(err); });
 });

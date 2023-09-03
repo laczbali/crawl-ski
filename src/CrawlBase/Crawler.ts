@@ -8,7 +8,7 @@ export class Crawler<CrawlerType extends ISiteCrawler> {
 
     public onProgress: (message: string, progress: number | null) => void = this.reportProgress;
 
-    constructor(c: new () => CrawlerType) {
+    constructor(c: new () => CrawlerType, private crawlDelayMs: number = 1000) {
         this.crawler = new c();
     }
 
@@ -23,6 +23,7 @@ export class Crawler<CrawlerType extends ISiteCrawler> {
             var region = regions[ix];
             this.onProgress(`Finding resorts [${region.name}]`, (ix + 1) / regions.length);
             var regionResorts = await this.crawler.getResorts(region);
+            await new Promise(resolve => setTimeout(resolve, this.crawlDelayMs));
             resortNodes = resortNodes.concat(regionResorts);
         }
         this.onProgress(`Found ${resortNodes.length} resorts`, null);
@@ -32,6 +33,7 @@ export class Crawler<CrawlerType extends ISiteCrawler> {
             var resortNode = resortNodes[ix];
             this.onProgress(`Crawling resorts [${resortNode.name}]`, (ix + 1) / resortNodes.length);
             var resort = await this.crawler.getResortInfo(resortNode);
+            await new Promise(resolve => setTimeout(resolve, this.crawlDelayMs));
             resorts.push(resort);
         }
 
