@@ -14,8 +14,10 @@
         {
             "label": "RUN",
             "type": "shell",
-            "command": "node .\\bin\\index.js",
-            "dependsOn": ["BUILD"],
+            "command": "node .\\bin\\index.js debug",
+            "dependsOn": [
+                "BUILD"
+            ],
             "options": {
                 "statusbar": {
                     "backgroundColor": "statusBarItem.warningBackground"
