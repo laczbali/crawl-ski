@@ -8,6 +8,6 @@ if (isDebugMode) {
 }
 
 await Orchestrator.doAll(
-    '.\\output',
+    'output',
     new CrawlIgluski(crawlDelayMs, isDebugMode)
 );

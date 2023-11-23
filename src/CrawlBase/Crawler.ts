@@ -90,7 +90,7 @@ export abstract class Crawler {
     }
 
     private reportProgress(message: string, progress: number | null = null) {
-        var logMessage = `${message}${progress == null ? '' : `... (${(progress * 100).toFixed(0)}%)`}`;
+        var logMessage = `${this.name} - ${message}${progress == null ? '' : `... (${(progress * 100).toFixed(0)}%)`}`;
         console.log(logMessage);
     }
 }
