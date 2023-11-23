@@ -1,10 +1,9 @@
-import { Crawler } from "./CrawlBase/Crawler.js";
 import { Resort } from "./CrawlBase/Models/Resort.js";
 import { CrawlIgluski } from "./CrawlIgluski/CrawlIgluski.js";
 import * as fs from 'fs';
 
 // get resort data
-var resorts = await new Crawler(CrawlIgluski).doCrawl();
+var resorts = await new CrawlIgluski().doCrawl();
 
 // build output csv files
 const outputDir = '.\\output';

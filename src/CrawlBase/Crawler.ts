@@ -1,28 +1,34 @@
-import { ISiteCrawler } from "./ISiteCrawler.js";
 import { CrawlNode } from "./Models/CrawlNode.js";
 import { Resort } from "./Models/Resort.js";
+import jsdom = require('jsdom');
 
-export class Crawler<CrawlerType extends ISiteCrawler> {
+const { JSDOM } = jsdom;
 
-    private crawler: ISiteCrawler;
+export abstract class Crawler {
+
+    private readonly isDebug = false;
 
     public onProgress: (message: string, progress: number | null) => void = this.reportProgress;
 
-    constructor(c: new () => CrawlerType, private crawlDelayMs: number = 1000) {
-        this.crawler = new c();
+    constructor(private crawlDelayMs: number = 1000) {
     }
 
     public async doCrawl(): Promise<Resort[]> {
         this.onProgress('Starting crawler', null);
 
-        var regions = await this.crawler.getRegions();
+        var regions = await this.getRegions();
+        if (this.isDebug) regions = regions.slice(0, 1);
+
         this.onProgress(`Found ${regions.length} regions`, null);
 
         var resortNodes: CrawlNode[] = [];
         for (var ix = 0; ix < regions.length; ix++) {
             var region = regions[ix];
             this.onProgress(`Finding resorts [${region.name}]`, (ix + 1) / regions.length);
-            var regionResorts = await this.crawler.getResorts(region);
+
+            var regionResorts = await this.getResorts(region);
+            if (this.isDebug) regionResorts = regionResorts.slice(0, 2);
+
             await new Promise(resolve => setTimeout(resolve, this.crawlDelayMs));
             resortNodes = resortNodes.concat(regionResorts);
         }
@@ -32,13 +38,42 @@ export class Crawler<CrawlerType extends ISiteCrawler> {
         for (var ix = 0; ix < resortNodes.length; ix++) {
             var resortNode = resortNodes[ix];
             this.onProgress(`Crawling resorts [${resortNode.name}]`, (ix + 1) / resortNodes.length);
-            var resort = await this.crawler.getResortInfo(resortNode);
+            var resort = await this.getResortInfo(resortNode);
             await new Promise(resolve => setTimeout(resolve, this.crawlDelayMs));
             resorts.push(resort);
         }
 
         this.onProgress(`Crawling complete, found ${resorts.length} resorts in ${regions.length} regions`, null);
         return resorts;
+    }
+
+    /**
+     * Returns the list of regions
+     * - eg1: France, Austria, ...
+     * - eg2: North Alpes, High Tatra, ...
+     */
+    protected abstract getRegions(): Promise<CrawlNode[]>;
+
+    /**
+     * Returns the list of resorts for a given region
+     * - eg: Les 2 Alpes, Les Orres, ...
+     */
+    protected abstract getResorts(region: CrawlNode): Promise<CrawlNode[]>;
+
+    /**
+     * Returns all the resort info
+     */
+    protected abstract getResortInfo(resort: CrawlNode): Promise<Resort>;
+
+    protected abstract baseUrl: string;
+
+    protected async makeRequest(relativeUrl: string): Promise<Document> {
+        if (relativeUrl.startsWith('/')) relativeUrl = relativeUrl.substring(1);
+        var url = `${this.baseUrl}${relativeUrl}`;
+
+        var response = await fetch(url);
+        var responseText = await response.text();
+        return new JSDOM(responseText).window.document;
     }
 
     private reportProgress(message: string, progress: number | null = null) {

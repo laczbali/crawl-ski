@@ -1,19 +1,15 @@
-import { ISiteCrawler } from "../CrawlBase/ISiteCrawler.js";
+import { Crawler } from "../CrawlBase/Crawler.js";
 import { CrawlNode } from "../CrawlBase/Models/CrawlNode.js";
 import { PriceInfo, Resort, SnowInfo } from "../CrawlBase/Models/Resort.js";
-import jsdom = require('jsdom');
-
-const { JSDOM } = jsdom;
 
 /**
  * Crawler for https://www.igluski.com/
  */
-export class CrawlIgluski implements ISiteCrawler {
+export class CrawlIgluski extends Crawler {
 
-    private readonly isDebug = false;
-    private readonly baseUrl = 'https://www.igluski.com/';
+    protected override baseUrl = 'https://www.igluski.com/';
 
-    public async getRegions(): Promise<CrawlNode[]> {
+    protected override async getRegions(): Promise<CrawlNode[]> {
         var data = await this.makeRequest('ski-resorts');
         var headers = Array.from(data.querySelectorAll('h3').values());
 
@@ -33,11 +29,10 @@ export class CrawlIgluski implements ISiteCrawler {
             return new CrawlNode(name, url);
         });
 
-        var validRegions = regions.filter(x => x.url !== '');
-        return this.isDebug ? validRegions.slice(0, 1) : validRegions;
+        return regions.filter(x => x.url !== '');
     }
 
-    public async getResorts(region: CrawlNode): Promise<CrawlNode[]> {
+    protected override async getResorts(region: CrawlNode): Promise<CrawlNode[]> {
         var data = await this.makeRequest(region.url);
         var headers = Array.from(data.querySelectorAll('h3').values());
         var header = headers.find(x => x.textContent?.toLowerCase().includes('resorts'));
@@ -51,11 +46,10 @@ export class CrawlIgluski implements ISiteCrawler {
             return new CrawlNode(name, url);
         });
 
-        var validResorts = resorts.filter(x => x.url !== '');
-        return this.isDebug ? validResorts.slice(0, 2) : validResorts;
+        return resorts.filter(x => x.url !== '');
     }
 
-    public async getResortInfo(resort: CrawlNode): Promise<Resort> {
+    protected override async getResortInfo(resort: CrawlNode): Promise<Resort> {
         var resortInfo = new Resort();
 
         // fill basic info
@@ -138,15 +132,6 @@ export class CrawlIgluski implements ISiteCrawler {
         }
 
         return resortInfo;
-    }
-
-    private async makeRequest(relativeUrl: string): Promise<Document> {
-        if (relativeUrl.startsWith('/')) relativeUrl = relativeUrl.substring(1);
-        var url = `${this.baseUrl}${relativeUrl}`;
-
-        var response = await fetch(url);
-        var responseText = await response.text();
-        return new JSDOM(responseText).window.document;
     }
 
 }
