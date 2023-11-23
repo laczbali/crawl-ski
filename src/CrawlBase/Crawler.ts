@@ -80,7 +80,8 @@ export abstract class Crawler {
      */
     protected async makeRequest(relativeUrl: string): Promise<Document> {
         if (relativeUrl.startsWith('/')) relativeUrl = relativeUrl.substring(1);
-        var url = `${this.baseUrl}${relativeUrl}`;
+        if (this.baseUrl.endsWith('/')) this.baseUrl = this.baseUrl.substring(0, this.baseUrl.length - 1);
+        var url = `${this.baseUrl}/${relativeUrl}`;
 
         var response = await fetch(url);
         var responseText = await response.text();
