@@ -6,7 +6,7 @@ const { JSDOM } = jsdom;
 
 export abstract class Crawler {
 
-    private readonly isDebug = false;
+    private readonly isDebug = true;
 
     public onProgress: (message: string, progress: number | null) => void = this.reportProgress;
 
@@ -48,6 +48,11 @@ export abstract class Crawler {
     }
 
     /**
+     * Returns the name of the crawler, used in output and such
+     */
+    public abstract readonly name: string;
+
+    /**
      * Returns the list of regions
      * - eg1: France, Austria, ...
      * - eg2: North Alpes, High Tatra, ...
@@ -65,8 +70,14 @@ export abstract class Crawler {
      */
     protected abstract getResortInfo(resort: CrawlNode): Promise<Resort>;
 
+    /**
+     * Base url for the website, makeRequest will append the relative url to this
+     */
     protected abstract baseUrl: string;
 
+    /***
+     * Makes a request relative to baseUrl, returns the resulting document
+     */
     protected async makeRequest(relativeUrl: string): Promise<Document> {
         if (relativeUrl.startsWith('/')) relativeUrl = relativeUrl.substring(1);
         var url = `${this.baseUrl}${relativeUrl}`;

@@ -7,6 +7,7 @@ import { PriceInfo, Resort, SnowInfo } from "../CrawlBase/Models/Resort.js";
  */
 export class CrawlIgluski extends Crawler {
 
+    public override readonly name = 'IgluSki';
     protected override baseUrl = 'https://www.igluski.com/';
 
     protected override async getRegions(): Promise<CrawlNode[]> {
