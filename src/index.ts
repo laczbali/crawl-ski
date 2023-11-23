@@ -1,6 +1,10 @@
 import { Orchestrator } from "./CrawlBase/Orchestrator.js";
 import { CrawlIgluski } from "./CrawlIgluski/CrawlIgluski.js";
 
+// TODO
+// - logging and alerting
+// - csv validation
+
 var crawlDelayMs = 1000;
 var isDebugMode = process.argv[2] === 'debug';
 if (isDebugMode) {
