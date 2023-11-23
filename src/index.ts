@@ -3,6 +3,9 @@ import { CrawlIgluski } from "./CrawlIgluski/CrawlIgluski.js";
 
 var crawlDelayMs = 1000;
 var isDebugMode = process.argv[2] === 'debug';
+if (isDebugMode) {
+    console.log('DEBUG mode enabled');
+}
 
 await Orchestrator.doAll(
     '.\\output',
