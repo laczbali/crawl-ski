@@ -6,11 +6,12 @@ const { JSDOM } = jsdom;
 
 export abstract class Crawler {
 
-    private readonly isDebug = true;
+    private isDebug = false;
 
     public onProgress: (message: string, progress: number | null) => void = this.reportProgress;
 
-    constructor(private crawlDelayMs: number = 1000) {
+    constructor(private crawlDelayMs: number = 1000, isDebug: boolean = false) {
+        this.isDebug = isDebug;
     }
 
     public async doCrawl(): Promise<Resort[]> {
