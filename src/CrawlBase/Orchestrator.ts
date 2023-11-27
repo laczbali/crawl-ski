@@ -11,11 +11,15 @@ export class Orchestrator {
 
         for (var crawler of crawlers) {
             console.log(`${crawler.name} - Starting (${index}/${crawlers.length})`)
-
             var fullOutputDir = path.join(outputDir, currentDateTime, crawler.name);
 
-            var resorts = await crawler.doCrawl();
-            await CsvHandler.dumpResorts(resorts, fullOutputDir);
+            try {
+                var resorts = await crawler.doCrawl();
+                await CsvHandler.dumpResorts(resorts, fullOutputDir);
+            }
+            catch (e) {
+                console.error(`${crawler.name} - Failed to crawl: ${e}`);
+            }
 
             console.log(`${crawler.name} - Complete`)
             index++;
