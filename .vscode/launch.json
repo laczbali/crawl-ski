@@ -14,6 +14,9 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}\\bin\\index.js",
+            "args": [
+                "debug"
+            ],
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ]
