@@ -1,5 +1,6 @@
 import { Orchestrator } from "./CrawlBase/Orchestrator.js";
 import { CrawlIgluski } from "./CrawlIgluski/CrawlIgluski.js";
+import { CrawlSielok } from "./CrawlSielok/CrawlSielok.js";
 
 // TODO
 // - logging and alerting
@@ -13,5 +14,6 @@ if (isDebugMode) {
 
 await Orchestrator.doAll(
     'output',
-    new CrawlIgluski(crawlDelayMs, isDebugMode)
+    new CrawlIgluski(crawlDelayMs, isDebugMode),
+    new CrawlSielok(crawlDelayMs, isDebugMode)
 );
