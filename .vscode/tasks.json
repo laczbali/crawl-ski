@@ -24,5 +24,16 @@
                 }
             }
         },
+        {
+            "label": "docker-build",
+            "type": "shell",
+            "command": "docker build -f deploy/Dockerfile -t blaczk0/crawlski:1.0 .",
+            "problemMatcher": [],
+            "options": {
+                "statusbar": {
+                    "hide": true
+                }
+            }
+        }
     ]
 }

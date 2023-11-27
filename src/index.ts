@@ -5,6 +5,9 @@ import { CrawlSielok } from "./CrawlSielok/CrawlSielok.js";
 // TODO
 // - logging and alerting
 // - csv validation
+// - isDebugMode should be an env var
+// - crawldelay should be an env var
+// - output folder should be an env var
 
 var crawlDelayMs = 1000;
 var isDebugMode = process.argv[2] === 'debug';

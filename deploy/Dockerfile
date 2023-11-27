@@ -8,7 +8,7 @@ RUN apt-get -y install cron
 RUN crontab -l | { cat; echo "PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"; } | crontab -
 RUN crontab -l | { cat; echo "LD_LIBRARY_PATH=/usr/local/lib"; } | crontab -
 
-COPY run.sh ./
+COPY deploy/run.sh ./
 # make sure the script is executable
 RUN chmod +x /app/run.sh
 
