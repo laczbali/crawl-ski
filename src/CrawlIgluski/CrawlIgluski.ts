@@ -1,6 +1,6 @@
 import { Crawler } from "../CrawlBase/Crawler.js";
 import { CrawlNode } from "../CrawlBase/Models/CrawlNode.js";
-import { PriceInfo, Resort, SnowInfo } from "../CrawlBase/Models/Resort.js";
+import { PriceInfo, Resort, SnowHistory } from "../CrawlBase/Models/Resort.js";
 
 /**
  * Crawler for https://www.igluski.com/
@@ -112,7 +112,7 @@ export class CrawlIgluski extends Crawler {
             var months = Array.from(snowTable?.querySelectorAll('tr td:first-of-type').values() ?? []).map(x => x.textContent ?? '').filter(x => x !== '');
             var valuePairs = Array.from(snowTable?.querySelectorAll('tr td:not(:first-of-type)').values() ?? []).map(x => x.textContent ?? '').filter(x => x !== '');
 
-            resortInfo.snowStats = valuePairs.map((x, ix) => {
+            resortInfo.snowHistory = valuePairs.map((x, ix) => {
                 var yearIndex = ix % yearRanges.length;
                 var monthIndex = Math.floor(ix / yearRanges.length);
 
@@ -122,7 +122,7 @@ export class CrawlIgluski extends Crawler {
                 var lowDepthNumStr = lowDepthRaw?.match(/\d+/)?.at(0) ?? '';
                 var highDepthNumStr = highDepthRaw?.match(/\d+/)?.at(0) ?? '';
 
-                var snowInfo = new SnowInfo();
+                var snowInfo = new SnowHistory();
                 snowInfo.yearRange = yearRanges[yearIndex];
                 snowInfo.month = months[monthIndex];
                 snowInfo.lowSlopeSnowDepthCm = lowDepthNumStr === '' ? -1 : parseInt(lowDepthNumStr);

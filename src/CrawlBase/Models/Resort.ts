@@ -4,7 +4,7 @@ export class Resort {
     url: string = '';
     region: string = '';
 
-    // slope stats
+    // base stats
     altitudeM: number = -1;
     highestLiftAltitudeM: number = -1;
     slopeLengthKm: number = -1;
@@ -12,7 +12,8 @@ export class Resort {
     liftCount: number = -1;
 
     // snow stats
-    snowStats: SnowInfo[] = [];
+    snowActual: SnowActual = new SnowActual();
+    snowHistory: SnowHistory[] = [];
 
     // pricing
     priceStats: PriceInfo[] = [];
@@ -24,7 +25,11 @@ export class Resort {
                 headers: ['Name', 'URL', 'Region', 'Altitude (m)', 'Highest Lift Altitude (m)', 'Slope Length (km)', 'Longest Run (km)', 'Lift Count']
             },
             {
-                name: 'snow',
+                name: 'snow-actual',
+                headers: ['Name', 'Date', 'Last Snowfall Date', 'Snow Depth Top (cm)', 'Snow Depth Bottom (cm)', 'Open Lift Count', 'Open Slope Length (km)']
+            },
+            {
+                name: 'snow-history',
                 headers: ['Name', 'Year Range', 'Month', 'Low Slope Snow Depth (cm)', 'High Slope Snow Depth (cm)']
             },
             {
@@ -49,22 +54,55 @@ export class Resort {
             this.longestRunKm.toFixed(0),
             this.liftCount.toFixed(0)
         ];
-        var snowInfo = this.snowStats.map(x => [this.name, x.yearRange, x.month, x.lowSlopeSnowDepthCm.toFixed(0), x.highSlopeSnowDepthCm.toFixed(0)]);
-        var priceInfo = this.priceStats.map(x => [this.name, x.numberOfDays.toFixed(0), x.price.toFixed(0), x.currency]);
+
+        var snowActual = [
+            this.name,
+            this.snowActual.date.toISOString(),
+            this.snowActual.lastSnowfallDate?.toISOString() ?? '',
+            this.snowActual.snowDepthTopCm.toFixed(0),
+            this.snowActual.snowDepthBottomCm.toFixed(0),
+            this.snowActual.openLiftCount.toFixed(0),
+            this.snowActual.openSlopeKm.toFixed(0)
+        ];
+
+        var snowHistory = this.snowHistory.map(x => [
+            this.name,
+            x.yearRange,
+            x.month,
+            x.lowSlopeSnowDepthCm.toFixed(0),
+            x.highSlopeSnowDepthCm.toFixed(0)
+        ]);
+
+        var priceInfo = this.priceStats.map(x => [
+            this.name,
+            x.numberOfDays.toFixed(0),
+            x.price.toFixed(0),
+            x.currency
+        ]);
 
         return [
             [baseInfo],
-            snowInfo,
+            [snowActual],
+            snowHistory,
             priceInfo
         ];
     }
 }
 
-export class SnowInfo {
+export class SnowHistory {
     yearRange: string = '';
     month: string = '';
     lowSlopeSnowDepthCm: number = -1;
     highSlopeSnowDepthCm: number = -1;
+}
+
+export class SnowActual {
+    date: Date = new Date();
+    lastSnowfallDate: Date | null = null;
+    snowDepthTopCm: number = -1;
+    snowDepthBottomCm: number = -1;
+    openLiftCount: number = -1;
+    openSlopeKm: number = -1;
 }
 
 export class PriceInfo {
