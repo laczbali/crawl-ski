@@ -8,6 +8,6 @@ npm install
 npx tsc
 cd ..
 
-node crawl-ski/bin/index.js $1 #  pass 'debug' as first param to enable debug mode
+node crawl-ski/bin/index.js $1 #  pass 'debug' as first param to enable debug mode 
 
 rm -rf crawl-ski
